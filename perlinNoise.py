@@ -1,6 +1,4 @@
-from cProfile import label
 import random
-from turtle import color
 import matplotlib.pyplot as plt
 
 
@@ -9,40 +7,32 @@ randomNums = [-0.8472978654485066, 0.9000528285750311, -0.4328894189757624, -0.0
 #print(randomNums)
 
 def getEquationOfLine(slope: int) -> callable:
-    def equation(y: int) -> int:
-        return slope * (    )
+    def equation(x0:int, y0:int, x1:int) -> int:
+        return slope * (x1-x0) + y0
+    
+    return equation
 
-randomNumsLine = map(lambda a: )
+randomNumsLine = list(map(getEquationOfLine, randomNums))
 
 interpolated = []
 incrementVal = 0.1
-for i in range(len(randomNums)-1):
+for i in range(len(randomNums)):
     distanceFromLeftPoint = 0
     
     for _ in range(int(1/incrementVal)):
-        newVal = randomNums[i] * (1-distanceFromLeftPoint) + randomNums[i+1]*distanceFromLeftPoint
-        print(i+distanceFromLeftPoint, newVal)
-        #plt.plot(i+distanceFromLeftPoint, newVal, 'ro')
+        posVal = randomNumsLine[i](i, 0, i+distanceFromLeftPoint)
+        negVal = randomNumsLine[i](i, 0, i-distanceFromLeftPoint)
         
-        interpolated.append(newVal)
+        plt.plot(i+distanceFromLeftPoint, posVal, 'bo')
+        plt.plot(i-distanceFromLeftPoint, negVal, 'bo')
+        
+        
         distanceFromLeftPoint += incrementVal
-
-interpolated.append(randomNums[-1])
-
-
-
-increment = 0.1
-for i in range(len(randomNums)):
-    #plt.axline((i, 0), slope=randomNums[i])
-    x = [i, i+increment, i-increment]
-    y = [0, increment/slope, -increment/slope]
-    #print(f'{i}: {x}\n{y}')
-    plt.plot(x, y)
+        
     plt.plot(i, 0, 'go')
 
 
-x = [i*incrementVal for i in range((len(randomNums)-1) * int(1/incrementVal)+1)]
-
+#x = [i*incrementVal for i in range((len(randomNums)-1) * int(1/incrementVal)+1)]
 #plt.plot(x, interpolated, label='interpolated')
 
 plt.legend()
