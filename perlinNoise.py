@@ -1,11 +1,12 @@
 from math import floor
 import random
-from xml.etree.ElementInclude import include
 import matplotlib.pyplot as plt
 
+incrementVal = 0.1
+numberOfPoints = 100
 
-#randomNums = [random.uniform(-1, 1) for i in range(10)]
-randomNums = [-0.8472978654485066, 0.9000528285750311, -0.4328894189757624, -0.0055113986838357665, -0.26868175295082874, -0.653747737881957, 0.6808501634140589, -0.2247107373599725, 0.6025352129131027, 0.4042941557771631, -0.18551517480776702]
+randomNums = [random.uniform(-1, 1) for i in range(numberOfPoints)]
+#randomNums = [-0.8472978654485066, 0.9000528285750311, -0.4328894189757624, -0.0055113986838357665, -0.26868175295082874, -0.653747737881957, 0.6808501634140589, -0.2247107373599725, 0.6025352129131027, 0.4042941557771631, -0.18551517480776702]
 #print(randomNums)
 
 def getEquationOfLine(slope: int) -> callable:
@@ -16,14 +17,9 @@ def getEquationOfLine(slope: int) -> callable:
 
 randomNumsLine = list(map(getEquationOfLine, randomNums))
 
-positiveValues = list[int]
-negativeValues = list[int]
-line = list[negativeValues, positiveValues]
-# y @ 0, 0.1, ... 1 | 0, -0.1, ...-1
 
 randomSlopeX = []
 randomSlopeY = []
-incrementVal = 0.1
 for i in range(len(randomNums)):
     distanceFromLeftPoint = 0
     
@@ -39,9 +35,6 @@ for i in range(len(randomNums)):
         randomSlopeX.append(i-distanceFromLeftPoint)
         randomSlopeY.append(negVal)
         
-        #plt.plot(i+distanceFromLeftPoint, posVal, 'bo')
-        #plt.plot(i-distanceFromLeftPoint, negVal, 'bo')
-        
         distanceFromLeftPoint += incrementVal
         
     #plt.plot(randomSlopeX, randomSlopeY, 'b')
@@ -50,10 +43,14 @@ for i in range(len(randomNums)):
     randomSlopeX.clear()
     randomSlopeY.clear()
     
+    
 interpolatedX, interpolatedY = [], []
-for i in range(1, len(randomNums)):
+for i in range(len(randomNums)):
+    if i == 0:
+        plt.plot(i, 0, 'go')
+        continue
+    
     increment = -1.0
-       
     for j in range(floor(1/incrementVal)+1):
         lastLineY = randomNumsLine[i-1](i-1, i+increment)
         currentLineY = randomNumsLine[i](i, i+increment)
@@ -69,16 +66,11 @@ for i in range(1, len(randomNums)):
     plt.plot(interpolatedX, interpolatedY, 'r')
         
     #plot point
-    plt.plot(i-1, 0, 'go')
     plt.plot(i, 0, 'go')
         
-    
-
-#x = [i*incrementVal for i in range((len(randomNums)-1) * int(1/incrementVal)+1)]
-#plt.plot(x, interpolated, label='interpolated')
 
 plt.legend()
-plt.xlim(-1, 11)
+plt.xlim(-1, numberOfPoints + 1)
 plt.ylim(-1, 1)
 plt.show()
 
