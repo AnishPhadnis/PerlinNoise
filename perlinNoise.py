@@ -1,10 +1,10 @@
-from cProfile import label
 from math import floor
 import random
 import matplotlib.pyplot as plt
 
-incrementVal = 0.1
-numberOfPoints = 10
+incrementVal = 0.01
+numberOfPoints = 20
+slopeIncrement = 0.5
 
 randomNums = [random.uniform(-1, 1) for i in range(numberOfPoints)]
 #randomNums = [-0.8472978654485066, 0.9000528285750311, -0.4328894189757624, -0.0055113986838357665, -0.26868175295082874, -0.653747737881957, 0.6808501634140589, -0.2247107373599725, 0.6025352129131027, 0.4042941557771631, -0.18551517480776702]
@@ -24,11 +24,11 @@ def getEquationOfLine(slope: int) -> callable:
     
     return equation
 
-def getInterpolatedVal(i: int, increment: float, x: float) -> float:
-    lastLineY = randomNumsLine[i-1](i-1, i+increment)
-    currentLineY = randomNumsLine[i](i, i+increment)
+def getInterpolatedVal(equation: int, x: float, increment: float,  adjustment: float) -> float:
+    lastLineY = randomNumsLine[equation-1](x-slopeIncrement, x+increment)
+    currentLineY = randomNumsLine[equation](x, x+increment)
         
-    interpolatedVal = lastLineY * abs(x) + currentLineY * (1-abs(x))
+    interpolatedVal = lastLineY * adjustment + currentLineY * (1-adjustment)
     
     return interpolatedVal
 
@@ -40,67 +40,66 @@ randomSlopeY = []
 for i in range(len(randomNums)):
     distanceFromLeftPoint = 0
     
-    randomSlopeX.append(i)
+    x = i * slopeIncrement
+    
+    randomSlopeX.append(x)
     randomSlopeY.append(0)
 
     for _ in range(int(1/incrementVal)):
-        posVal = randomNumsLine[i](i, i+distanceFromLeftPoint)
-        randomSlopeX.append(i+distanceFromLeftPoint)
+        posVal = randomNumsLine[i](x, x+distanceFromLeftPoint)
+        randomSlopeX.append(x+distanceFromLeftPoint)
         randomSlopeY.append(posVal)
         
-        negVal = randomNumsLine[i](i, i-distanceFromLeftPoint)
-        randomSlopeX.append(i-distanceFromLeftPoint)
+        negVal = randomNumsLine[i](x, x-distanceFromLeftPoint)
+        randomSlopeX.append(x-distanceFromLeftPoint)
         randomSlopeY.append(negVal)
         
         distanceFromLeftPoint += incrementVal
         
-    #plt.plot(randomSlopeX, randomSlopeY, 'b')
-    #plt.plot(i, 0, 'go')
+    plt.plot(randomSlopeX, randomSlopeY, 'b')
     
     randomSlopeX.clear()
     randomSlopeY.clear()
     
     
 for i in range(len(randomNums)):
+    x = i * slopeIncrement
+    
     if i == 0:
-        plt.plot(i, 0, 'go')
+        plt.plot(x, 0, 'go')
         continue
     
     xVals, interpolatedY = [], []
     smoothersteppedX, smoothersteppedY = [], []
     
-    increment = -1.0
-    for _ in range(floor(1/incrementVal)+1):
-        #lastLineY = randomNumsLine[i-1](i-1, i+increment)
-        #currentLineY = randomNumsLine[i](i, i+increment)
-        
-        #interpolatedVal = lastLineY * abs(increment) + currentLineY * (1-abs(increment))
-        interpolatedVal = getInterpolatedVal(i, increment, increment)
-        
-        #plt.plot(i+increment, interpolatedVal, 'ro')
-        xVals.append(i+increment)
+    increment = -1 * slopeIncrement
+    for _ in range(floor(slopeIncrement/incrementVal)+1):
+        interpolatedVal = getInterpolatedVal(i, x, increment, abs(increment/slopeIncrement))
+
+        xVals.append(x+increment)
         interpolatedY.append(interpolatedVal)
         
         # ------
         
-        smootherstepped = smootherstep(abs(increment))
+        smootherstepped = smootherstep(abs(increment/slopeIncrement))
         
-        smootherstepInterpolated = getInterpolatedVal(i, increment, smootherstepped)
+        smootherstepInterpolated = getInterpolatedVal(i, x, increment, smootherstepped)
         
-        smoothersteppedX.append(i+increment)
+        smoothersteppedX.append(x+increment)
         smoothersteppedY.append(smootherstepInterpolated)
         
-        increment += 0.1
+        # ------
+        
+        increment += incrementVal
         
     plt.plot(xVals, interpolatedY, 'r')
     plt.plot(smoothersteppedX, smoothersteppedY, 'y')
         
-    #plot point
-    plt.plot(i, 0, 'go')
+    plt.plot(x, 0, 'go')
         
 
 plt.legend()
-plt.xlim(-1, numberOfPoints + 1)
+plt.xlim(-1, numberOfPoints*slopeIncrement+1)
 plt.ylim(-1, 1)
 plt.show()
 
