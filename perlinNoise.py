@@ -6,10 +6,11 @@ incrementVal = 0.01
 numberOfPoints = 10
 slopeIncrement = 1
 seed = 1
+amplitude = 10
 
 random.seed(seed)
 
-randomNums = [random.uniform(-1, 1) for i in range(numberOfPoints)]
+randomNums = [random.uniform(-1 * amplitude, amplitude) for i in range(numberOfPoints)]
 #randomNums = [-0.8472978654485066, 0.9000528285750311, -0.4328894189757624, -0.0055113986838357665, -0.26868175295082874, -0.653747737881957, 0.6808501634140589, -0.2247107373599725, 0.6025352129131027, 0.4042941557771631, -0.18551517480776702]
 #print(randomNums)
 
@@ -103,7 +104,7 @@ for i in range(len(randomNums)):
 
 plt.legend()
 plt.xlim(-1, numberOfPoints*slopeIncrement+1)
-plt.ylim(-1, 1)
+plt.ylim(-1 * amplitude, amplitude)
 plt.show()
 
 
