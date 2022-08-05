@@ -1,4 +1,7 @@
 # how high and low values can go
+from noise import PerlinNoise
+
+
 amplitude = 0 # implemented
 
 # increment of x value where random slope is generated?
@@ -16,4 +19,7 @@ persistence = 0
 # frequency of successive octaves
 lacunarity = 0
 
+perlin = PerlinNoise()
 
+for i in range(10):
+    print(perlin.getSlopeAt(i))
