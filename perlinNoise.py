@@ -1,7 +1,8 @@
+from cProfile import label
 from math import floor
 import random
 import matplotlib.pyplot as plt
-
+        
 incrementVal = 0.01
 numberOfPoints = 10
 slopeIncrement = 1
@@ -100,9 +101,8 @@ for i in range(len(randomNums)):
     plt.plot(smoothersteppedX, smoothersteppedY, 'y')
         
     plt.plot(x, 0, 'go')
-        
 
-plt.legend()
+
 plt.xlim(-1, numberOfPoints*slopeIncrement+1)
 plt.ylim(-1 * amplitude, amplitude)
 plt.show()

@@ -1,5 +1,6 @@
 # how high and low values can go
 from noise import PerlinNoise
+import matplotlib.pyplot as plt
 
 
 amplitude = 0 # implemented
@@ -19,7 +20,19 @@ persistence = 0
 # frequency of successive octaves
 lacunarity = 0
 
-perlin = PerlinNoise()
+perlin = PerlinNoise(amplitude=10)
 
+x, y = [], []
 for i in range(10):
-    print(perlin.getSlopeAt(i))
+    inc = i
+    for _ in range(10):
+        x.append(inc)
+        y.append(perlin.getNoiseAt(inc))
+        
+        inc += 0.1
+
+
+plt.plot(x, y, 'y')
+plt.xlim(-1, 11)
+plt.ylim(-10, 10)
+plt.show()
