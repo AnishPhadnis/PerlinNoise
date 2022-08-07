@@ -24,22 +24,19 @@ class PerlinNoise():
     
     # Extend for higher dimensions
     def getNoiseAt(self, x: float) -> float:
-        if x % self.frequency == 0:
-            return 0
-        
         lowerBound: int = int(x // self.frequency) * self.frequency
         upperBound: int = lowerBound + self.frequency
         
         distanceToLowerBound: float = x - lowerBound
         
-        smoothersteppedDiff: float = self.smootherstep(distanceToLowerBound)
+        smoothersteppedDiff: float = self.smootherstep(distanceToLowerBound / self.frequency)
         
-        persistenceInc = 1
+        persistenceInc = self.amplitude
         yVal = 0
     
         for octave in range(self.octaves):
-            lowerBoundSlope: float = self.getSlopeAt(lowerBound, octave, self.amplitude * persistenceInc)
-            upperBoundSlope: float = self.getSlopeAt(upperBound, octave, self.amplitude * persistenceInc)
+            lowerBoundSlope: float = self.getSlopeAt(lowerBound, octave) * persistenceInc
+            upperBoundSlope: float = self.getSlopeAt(upperBound, octave) * persistenceInc
         
         
             result: float = self.getInterpolated(self.getY(lowerBoundSlope, lowerBound, x),
@@ -57,15 +54,15 @@ class PerlinNoise():
     # not that same x val returns same random num
     # no matter what x vals are, sequence of nums will always be same
     @functools.cache
-    def getSlopeAt(self, x: int, octave: int, amplitude: float) -> float:
-        return random.uniform(-1 * amplitude, amplitude)
+    def getSlopeAt(self, x: int, octave: int) -> float:
+        return random.uniform(-1, 1)
         
     
     def smootherstep(self, x: int) -> float:
         return -1 * (-2*x**3 + 3*x**2) + 1
     
     def getInterpolated(self, y1: float, y2: float, adjustment: float) -> float:
-        return y1 * adjustment + y2 * (self.frequency - adjustment)
+        return y1 * adjustment + y2 * (1 - adjustment)
     
     def getY(self, slope: float, x0: float, x1: float) -> float:
         return slope * (x1 - x0)

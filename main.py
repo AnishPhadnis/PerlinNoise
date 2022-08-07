@@ -34,7 +34,7 @@ for i in range(10):
         inc += 0.1
         
         
-plt.plot(x, y1, 'r')
+#plt.plot(x, y1, 'r')
 
 perlin2 = PerlinNoise(seed=2, amplitude=5, frequency=0.5)
 
@@ -62,11 +62,11 @@ for i in range(10):
         
         inc += 0.1
         
-plt.plot(x, y3, 'b')
+#plt.plot(x, y3, 'b')
 
 t = []
 for a, b, c in zip(y1, y2, y3):
-    t.append(a + c)
+    t.append(a + b + c)
 
 plt.plot(x, t, 'y')
 
