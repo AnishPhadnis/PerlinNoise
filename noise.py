@@ -10,7 +10,7 @@ class PerlinNoise():
                  scale: float = 1,
                  octaves: float = 1,
                  persistence: float = 0.5,
-                 lancunarity: float = 1
+                 lancunarity: float = 0.5
                  ):
         self.seed = seed # used
         self.amplitude = amplitude # used
@@ -24,31 +24,41 @@ class PerlinNoise():
     
     # Extend for higher dimensions
     def getNoiseAt(self, x: float) -> float:
-        lowerBound: int = int(x // self.frequency) * self.frequency
-        upperBound: int = lowerBound + self.frequency
+        freq: float = self.frequency
         
-        distanceToLowerBound: float = x - lowerBound
-        
-        smoothersteppedDiff: float = self.smootherstep(distanceToLowerBound / self.frequency)
-        
-        persistenceInc = self.amplitude
-        yVal = 0
-    
-        for octave in range(self.octaves):
-            lowerBoundSlope: float = self.getSlopeAt(lowerBound, octave) * persistenceInc
-            upperBoundSlope: float = self.getSlopeAt(upperBound, octave) * persistenceInc
+        finalRes: float = 0
         
         
-            result: float = self.getInterpolated(self.getY(lowerBoundSlope, lowerBound, x),
-                                            self.getY(upperBoundSlope, upperBound, x), smoothersteppedDiff
-                                            )
+        
+        for _ in range(int(self.frequency // self.lancunarity)-1):
+            lowerBound: int = int(x // freq) * freq
+            upperBound: int = lowerBound + freq
+            
+            distanceToLowerBound: float = x - lowerBound
+            
+            smoothersteppedDiff: float = self.smootherstep(distanceToLowerBound / freq)
+            
+            persistenceInc = self.amplitude
+            yVal = 0
+        
+            for octave in range(self.octaves):
+                lowerBoundSlope: float = self.getSlopeAt(lowerBound, octave) * persistenceInc
+                upperBoundSlope: float = self.getSlopeAt(upperBound, octave) * persistenceInc
+            
+            
+                result: float = self.getInterpolated(self.getY(lowerBoundSlope, lowerBound, x),
+                                                     self.getY(upperBoundSlope, upperBound, x),
+                                                     smoothersteppedDiff
+                                                )
 
-            yVal += result 
-            persistenceInc *= self.persistence
-            
-            
+                yVal += result 
+                persistenceInc *= self.persistence
+                
+            finalRes += yVal
+                
+            freq *= self.lancunarity
         
-        return yVal
+        return finalRes
         
     # seed makes it so sequence of random num is always same
     # not that same x val returns same random num
