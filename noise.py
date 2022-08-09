@@ -23,14 +23,12 @@ class PerlinNoise():
         random.seed(self.seed)
     
     # Extend for higher dimensions
-    def getNoiseAt(self, x: float) -> float:
-        freq: float = self.frequency
-        
-        finalRes: float = 0
-        
-        
-        
-        for _ in range(int(self.frequency // self.lancunarity)-1):
+    def getNoiseAt(self, x: float) -> float:        
+        persistenceInc = self.amplitude
+        freq = self.frequency
+        yVal = 0
+    
+        for octave in range(self.octaves):
             lowerBound: int = int(x // freq) * freq
             upperBound: int = lowerBound + freq
             
@@ -38,27 +36,21 @@ class PerlinNoise():
             
             smoothersteppedDiff: float = self.smootherstep(distanceToLowerBound / freq)
             
-            persistenceInc = self.amplitude
-            yVal = 0
+            lowerBoundSlope: float = self.getSlopeAt(lowerBound, octave) * persistenceInc
+            upperBoundSlope: float = self.getSlopeAt(upperBound, octave) * persistenceInc
         
-            for octave in range(self.octaves):
-                lowerBoundSlope: float = self.getSlopeAt(lowerBound, octave) * persistenceInc
-                upperBoundSlope: float = self.getSlopeAt(upperBound, octave) * persistenceInc
-            
-            
-                result: float = self.getInterpolated(self.getY(lowerBoundSlope, lowerBound, x),
-                                                     self.getY(upperBoundSlope, upperBound, x),
-                                                     smoothersteppedDiff
-                                                )
+        
+            result: float = self.getInterpolated(self.getY(lowerBoundSlope, lowerBound, x),
+                                                 self.getY(upperBoundSlope, upperBound, x),
+                                                 smoothersteppedDiff
+                                                 )
 
-                yVal += result 
-                persistenceInc *= self.persistence
-                
-            finalRes += yVal
-                
+            yVal += result 
+            
+            persistenceInc *= self.persistence
             freq *= self.lancunarity
         
-        return finalRes
+        return yVal
         
     # seed makes it so sequence of random num is always same
     # not that same x val returns same random num

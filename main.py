@@ -68,12 +68,15 @@ t = []
 for a, b, c in zip(y1, y2, y3):
     t.append(a + c)
 
-plt.plot(x, t, 'y')
+#plt.plot(x, t, 'y')
 
-perlin4 = PerlinNoise(seed=1, amplitude=10, octaves=1, persistence=0.5, frequency=1, lancunarity=0.5)
+perlin4 = PerlinNoise(seed=2,
+                      amplitude=10,
+                      octaves=5, persistence=0.3,
+                      frequency=1, lancunarity=0.3)
 x, y4 = [], []
 
-for i in range(10):
+for i in range(100):
     inc = i
     
     for _ in range(10):
@@ -83,7 +86,7 @@ for i in range(10):
         inc += 0.1
         
 
-#plt.plot(x, y4, 'b')
+plt.plot(x, y4, 'b')
 plt.xlim(-1, 11)
-plt.ylim(-10, 10)
+plt.ylim(-10, 30)
 plt.show()
