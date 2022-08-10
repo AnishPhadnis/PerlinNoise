@@ -72,8 +72,8 @@ for a, b, c in zip(y1, y2, y3):
 
 perlin4 = PerlinNoise(seed=2,
                       amplitude=10,
-                      octaves=5, persistence=0.3,
-                      frequency=1, lancunarity=0.3)
+                      octaves=6, persistence=0.5,
+                      frequency=1, lancunarity=0.5)
 x, y4 = [], []
 
 for i in range(100):

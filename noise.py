@@ -27,6 +27,10 @@ class PerlinNoise():
         persistenceInc = self.amplitude
         freq = self.frequency
         yVal = 0
+        
+        """
+        are frequencies wrong? just adding y values of different graphs with different frequencies so the line is a bit shaky but there isn't a significant amount of micro features on the line
+        """
     
         for octave in range(self.octaves):
             lowerBound: int = int(x // freq) * freq
