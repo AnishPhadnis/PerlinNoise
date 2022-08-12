@@ -29,7 +29,7 @@ for i in range(10):
 
     for _ in range(10):
         x.append(inc)
-        y1.append(perlin1.getNoiseAt(inc))
+        #y1.append(perlin1.getNoiseAt(inc))
         
         inc += 0.1
         
@@ -44,7 +44,7 @@ for i in range(10):
 
     for _ in range(10):
         x.append(inc)
-        y2.append(perlin2.getNoiseAt(inc))
+        #y2.append(perlin2.getNoiseAt(inc))
         
         inc += 0.1
         
@@ -58,7 +58,7 @@ for i in range(10):
 
     for _ in range(10):
         x.append(inc)
-        y3.append(perlin3.getNoiseAt(inc))
+        #y3.append(perlin3.getNoiseAt(inc))
         
         inc += 0.1
         
@@ -71,22 +71,22 @@ for a, b, c in zip(y1, y2, y3):
 #plt.plot(x, t, 'y')
 
 perlin4 = PerlinNoise(seed=2,
-                      amplitude=10,
-                      octaves=6, persistence=0.5,
-                      frequency=1, lancunarity=0.5)
+                      octaves=6,
+                      amplitude=10,persistence=0.5,
+                      frequency=0.5, lancunarity=0.5)
 x, y4 = [], []
 
-for i in range(100):
+for i in range(1):
     inc = i
     
-    for _ in range(10):
+    for _ in range(1000):
         x.append(inc)
         y4.append(perlin4.getNoiseAt(inc))
         
-        inc += 0.1
+        inc += 0.001
         
 
-plt.plot(x, y4, 'b')
-plt.xlim(-1, 11)
-plt.ylim(-10, 30)
+plt.plot(x, y4, 'r', linewidth=0.3)
+plt.xlim(0, 1)
+plt.ylim(-11, 11)
 plt.show()

@@ -1,5 +1,6 @@
 import functools
 import random
+import matplotlib.pyplot as plt
 
 class PerlinNoise():
     
@@ -33,8 +34,10 @@ class PerlinNoise():
         """
     
         for octave in range(self.octaves):
-            lowerBound: int = int(x // freq) * freq
-            upperBound: int = lowerBound + freq
+            lowerBound: float = int(x // freq) * freq
+            upperBound: float = lowerBound + freq
+            
+            print(f'{x}: {lowerBound}-{upperBound}')
             
             distanceToLowerBound: float = x - lowerBound
             
@@ -74,3 +77,23 @@ class PerlinNoise():
         return slope * (x1 - x0)
     
     
+perlin4 = PerlinNoise(seed=2,
+                      octaves=6,
+                      amplitude=10,persistence=0.5,
+                      frequency=0.5, lancunarity=0.5)
+x, y4 = [], []
+
+for i in range(1):
+    inc = i
+    
+    for _ in range(1000):
+        x.append(inc)
+        y4.append(perlin4.getNoiseAt(inc))
+        
+        inc += 0.001
+        
+
+plt.plot(x, y4, 'r', linewidth=0.3)
+plt.xlim(0, 1)
+plt.ylim(-11, 11)
+plt.show()
