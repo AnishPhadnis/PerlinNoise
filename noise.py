@@ -24,7 +24,10 @@ class PerlinNoise():
         random.seed(self.seed)
     
     # Extend for higher dimensions
-    def getNoiseAt(self, x: float) -> float:        
+    def getNoiseAt(self, x: float) -> float:   
+        """if x % self.frequency == 0:
+            return 0"""
+             
         persistenceInc = self.amplitude
         freq = self.frequency
         yVal = 0
@@ -34,6 +37,9 @@ class PerlinNoise():
         """
     
         for octave in range(self.octaves):
+            #persistenceInc = 2 ** octave 
+            #freq = 2 ** octave
+            
             lowerBound: float = int(x // freq) * freq
             upperBound: float = lowerBound + freq
             
@@ -63,7 +69,7 @@ class PerlinNoise():
     # not that same x val returns same random num
     # no matter what x vals are, sequence of nums will always be same
     @functools.cache
-    def getSlopeAt(self, x: int, octave: int) -> float:
+    def getSlopeAt(self, x: float, octave: int) -> float:
         return random.uniform(-1, 1)
         
     
@@ -77,23 +83,23 @@ class PerlinNoise():
         return slope * (x1 - x0)
     
     
-perlin4 = PerlinNoise(seed=2,
-                      octaves=6,
-                      amplitude=10,persistence=0.5,
-                      frequency=0.5, lancunarity=0.5)
-x, y4 = [], []
+perlin = PerlinNoise(seed=20,
+                    octaves=6,
+                    amplitude=1,persistence=0.5,
+                    frequency=0.5, lancunarity=0.8)
+x, y = [], []
 
-for i in range(1):
+for i in range(10):
     inc = i
     
-    for _ in range(1000):
+    for _ in range(10):
         x.append(inc)
-        y4.append(perlin4.getNoiseAt(inc))
+        y.append(perlin.getNoiseAt(inc))
         
-        inc += 0.001
+        inc += 0.1
         
-
-plt.plot(x, y4, 'r', linewidth=0.3)
-plt.xlim(0, 1)
-plt.ylim(-11, 11)
+print(y)
+plt.plot(x, y, 'r', linewidth=0.8)
+plt.xlim(0, 11)
+plt.ylim(-20, 20)
 plt.show()
