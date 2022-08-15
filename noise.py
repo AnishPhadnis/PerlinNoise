@@ -22,6 +22,11 @@ class PerlinNoise():
         self.lancunarity = lancunarity
         
         random.seed(self.seed)
+        
+        self.maxVal = -1000
+        self.minVal = 1000
+        
+
     
     # Extend for higher dimensions
     def getNoiseAt(self, x: float) -> float:   
@@ -43,7 +48,7 @@ class PerlinNoise():
             lowerBound: float = int(x // freq) * freq
             upperBound: float = lowerBound + freq
             
-            print(f'{x}: {lowerBound}-{upperBound}')
+            #print(f'{x}: {lowerBound}-{upperBound}')
             
             distanceToLowerBound: float = x - lowerBound
             
@@ -62,8 +67,16 @@ class PerlinNoise():
             
             persistenceInc *= self.persistence
             freq *= self.lancunarity
+            
+        self.maxVal = max(yVal, self.maxVal)
+        self.minVal = min(yVal, self.minVal)
         
-        return yVal
+        if self.persistence < 1:
+            normalized = 3*self.amplitude * ((yVal - (-1.5)*self.amplitude)/(self.amplitude*1.5-(-1.5)*self.amplitude)) + (-1.5)*self.amplitude
+        else:
+            normalized = yVal
+        
+        return normalized
         
     # seed makes it so sequence of random num is always same
     # not that same x val returns same random num
@@ -83,23 +96,27 @@ class PerlinNoise():
         return slope * (x1 - x0)
     
     
-perlin = PerlinNoise(seed=20,
-                    octaves=6,
-                    amplitude=1,persistence=0.5,
-                    frequency=0.5, lancunarity=0.8)
+perlin = PerlinNoise(
+                    seed=5,
+                    octaves=8,
+                    amplitude=1, persistence=0.5,
+                    frequency=2, lancunarity=3
+                    )
 x, y = [], []
 
-for i in range(10):
+for i in range(50):
     inc = i
     
-    for _ in range(10):
+    for _ in range(1000):
         x.append(inc)
         y.append(perlin.getNoiseAt(inc))
         
-        inc += 0.1
+        inc += 0.001
         
-print(y)
+#print(y)
+print(perlin.maxVal)
+print(perlin.minVal)
 plt.plot(x, y, 'r', linewidth=0.8)
-plt.xlim(0, 11)
-plt.ylim(-20, 20)
+plt.xlim(0, 51)
+plt.ylim(-3, 3)
 plt.show()
