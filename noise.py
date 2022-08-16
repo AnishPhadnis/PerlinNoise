@@ -1,6 +1,7 @@
 import functools
 import random
 import matplotlib.pyplot as plt
+import time
 
 class PerlinNoise():
     
@@ -97,7 +98,7 @@ class PerlinNoise():
     
     
 perlin = PerlinNoise(
-                    seed=5,
+                    seed=1,
                     octaves=8,
                     amplitude=1, persistence=0.5,
                     frequency=2, lancunarity=3
@@ -107,16 +108,48 @@ x, y = [], []
 for i in range(50):
     inc = i
     
-    for _ in range(1000):
+    for _ in range(1):
         x.append(inc)
         y.append(perlin.getNoiseAt(inc))
         
-        inc += 0.001
-        
+        inc += 1
+#print(x, y)
+plt.ion()
 #print(y)
-print(perlin.maxVal)
-print(perlin.minVal)
-plt.plot(x, y, 'r', linewidth=0.8)
+#print(perlin.maxVal)
+#print(perlin.minVal)
+#line = plt.plot(x, y, 'r', linewidth=0.8)
+#print(line[0])
 plt.xlim(0, 51)
 plt.ylim(-3, 3)
-plt.show()
+
+#figure, axes = plt.subplots()
+
+
+inc = 50
+
+for i in range(100000000):
+    #time.sleep(0.1)
+    plt.pause(0.00001)
+    
+    x.pop(0)
+    x.append(inc)
+    
+    y.pop(0)
+    y.append(perlin.getNoiseAt(inc))
+    
+    #line[0].set_xdata(x)
+    #line[0].set_ydata(y)
+    #axes.plot(x, y, 'r')
+    plt.xlim(inc-50, inc)
+    plt.plot(x, y, 'r')
+    
+    
+    #plt.draw()
+    plt.show()
+    
+    inc += 1
+    
+    
+
+
