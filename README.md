@@ -7,3 +7,7 @@ Resources Used
 
 Fractal Noise
 - https://thebookofshaders.com/13/
+
+2d perlin noise
+- https://playstarbound.com/october-27th-caves/
+- https://www.fbxiang.com/blog/2017/11/03/implementing_perlin_noise.html
